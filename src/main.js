@@ -10,8 +10,12 @@ import router from './router'
 import store from './store'
 
 // Equal vue components library
-import Equal from 'equal-vue'
-import 'equal-vue/dist/style.css'
+// import Equal from 'equal-vue'
+// import 'equal-vue/dist/style.css'
+
+// Element Plus components
+import ElementPus from 'element-plus'
+import "@/assets/themes/element-theme.scss";
 
 // Tailwind CSS
 import 'tailwindcss/tailwind.css'
@@ -21,5 +25,5 @@ createApp(App)
     .use(store)
     .use(router)
     .use(router)
-    .use(Equal)
+    .use(ElementPus)
     .mount('#app')
