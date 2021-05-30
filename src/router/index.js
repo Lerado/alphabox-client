@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 // Import modules routes
 import usersModuleRoutes from '@/modules/modules.users/routes'
+import { gamesModuleFullpageRoutes } from '@/modules/modules.games/routes'
 
 const routes = [
   {
@@ -11,6 +12,9 @@ const routes = [
     children: [
       // Users modules routes
       ...usersModuleRoutes,
+
+      // Games module fullpage routes
+      ...gamesModuleFullpageRoutes,
 
       // Welcome page
       {

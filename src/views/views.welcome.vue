@@ -39,7 +39,4 @@ export default {};
   color: white;
   font-family: VT323;
 }
-
-#logo {
-}
 </style>
