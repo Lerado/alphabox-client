@@ -32,10 +32,10 @@
       </div>
 
       <!-- Login component -->
-      <login-component v-if="!toggleForms" />
+      <login-component @toggle="toggleForms = !toggleForms" v-if="!toggleForms" />
 
       <!-- Register component -->
-      <register-component v-else />
+      <register-component @toggle="toggleForms = !toggleForms" v-else />
 
       <div class="flex flex-row justify-end pr-24">
         <el-button class="text-primary animate-bounce" type="text">

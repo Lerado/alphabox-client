@@ -3,10 +3,17 @@ import { SET_USER } from './mutations-types';
 
 // Routes available server-side
 const api = {
-    login: '/users/login'
+    login: '/users/login',
+    register: '/users'
 };
 
 export default {
+    /**
+     * Attempts to log a user in the system
+     * @param {*} param0 
+     * @param {*} param1 User's credentials
+     * @param {*} commitable Commit to state or not
+     */
     async attemptLogin({ commit }, { username, password, remember_me }, commitable = true) {
         // Construct request payload
         let user = {
@@ -20,5 +27,25 @@ export default {
         let response = await http.post(api.login, { user }, { withCredentials: true });
         if (commitable)
             commit(SET_USER, response.user);
+    },
+
+    /**
+     * Attempts to register a user into the system
+     * @param {*} param0 
+     * @param {*} param1 User's informations
+     * @param {*} commitable Commit to state or not
+     */
+    async attemptRegister({ commit }, { username, email, password, password_confirmation }, commitable = true) {
+        let user = {
+            username: username,
+            email: email,
+            password: password,
+            password_confirmation: password_confirmation
+        };
+
+        // Async request
+        let response = await http.post(api.register, { user });
+        if (commitable)
+            commit(SET_USER, response.user)
     }
 }
