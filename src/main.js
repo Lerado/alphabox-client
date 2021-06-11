@@ -9,10 +9,6 @@ import router from './router'
 // Vuex store management
 import store from './store'
 
-// Equal vue components library
-// import Equal from 'equal-vue'
-// import 'equal-vue/dist/style.css'
-
 // Element Plus components
 import ElementPus from 'element-plus'
 import "@/assets/themes/element-theme.scss";
