@@ -5,6 +5,6 @@ const http = axios.create({
 });
 
 // Add interceptors to format responses and errors correctly
-http.interceptors.response.use(response => response.data, error => Promise.reject(error.response.data));
+http.interceptors.response.use(response => response.data, error => Promise.reject(error.response ? error.response.data : error));
 
 export default http;
