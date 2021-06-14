@@ -16,10 +16,14 @@ import "@/assets/themes/element-theme.scss";
 // Tailwind CSS
 import 'tailwindcss/tailwind.css'
 
+// Import flags icons
+import FlagIcon from 'vue-flag-icon';
+
 // Mount app in main entry point and load plugins
 createApp(App)
     .use(store)
     .use(router)
     .use(router)
     .use(ElementPus)
+    .use(FlagIcon)
     .mount('#app')

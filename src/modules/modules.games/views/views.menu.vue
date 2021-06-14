@@ -9,10 +9,14 @@
       </el-button>
       <el-select v-model="selectedLanguage" class="w-1/12" :size="'small'">
         <el-option
-          v-for="(language, index) in supportedLanguages"
+          v-for="(language, index) in languagesOptions"
           :key="index"
-          :value="language"
-          >{{ language }}</el-option
+          :value="language.id"
+          :label="language.label"
+          >
+          <flag :iso="language.countryCode" />
+          {{ language.label }}
+        </el-option
         >
       </el-select>
     </div>
@@ -94,6 +98,8 @@
 import { mapGetters } from "vuex";
 // Mixins for local storage management
 import localStorageMixins from "../mixins/localStorage";
+// Languages front infos
+import { languages } from "../services/data/languages";
 
 export default {
   mixins: [localStorageMixins],
@@ -108,6 +114,11 @@ export default {
     ...mapGetters({
       supportedLanguages: "games/getSupportedLanguages",
     }),
+
+    languagesOptions() {
+      console.log(this.supportedLanguages.map(language => (languages.find(element => element.id = language))));
+      return this.supportedLanguages.map(language => (languages.find(element => element.id = language)));
+    },
   },
 
   async created() {
