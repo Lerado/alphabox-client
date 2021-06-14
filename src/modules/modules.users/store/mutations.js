@@ -6,8 +6,7 @@ export default {
      * @param {*} state 
      * @param {*} user 
      */
-    [ types.SET_USER ] (state, user)
-    {
+    [types.SET_USER](state, user) {
         state.user = user;
     }
 }

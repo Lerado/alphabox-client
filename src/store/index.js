@@ -1,19 +1,20 @@
-import { createStore } from 'vuex'
+import { createStore } from 'vuex';
 
 // State
-import state from './state'
+import state from './state';
 
 // Getters
-import getters from './getters'
+import getters from './getters';
 
 // Mutations
-import mutations from './mutations'
+import mutations from './mutations';
 
 // Actions
-import actions from './actions'
+import actions from './actions';
 
 // Modules - Here we import store from our different modules
-import usersModuleStore from '@/modules/modules.users/store'
+import usersModuleStore from '@/modules/modules.users/store';
+import gamesModuleStore from "@/modules/modules.games/store";
 
 export default createStore({
   state: state,
@@ -21,6 +22,7 @@ export default createStore({
   getters: getters,
   actions: actions,
   modules: {
-    users: usersModuleStore
+    users: usersModuleStore,
+    games: gamesModuleStore
   }
 })
