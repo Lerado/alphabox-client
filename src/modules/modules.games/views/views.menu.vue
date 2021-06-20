@@ -4,7 +4,7 @@
     :style="`background-image: url('${require('@/assets/backgrounds/main-menu-bg.png')}')`"
   >
     <div class="flex flex-row justify-between w-full px-5 py-5">
-      <el-button type="text">
+      <el-button @click="$router.back()" type="text">
         <i class="text-3xl font-bold text-white el-icon-arrow-left"></i>
       </el-button>
       <el-select v-model="selectedLanguage" class="w-1/12" :size="'small'">
@@ -44,7 +44,7 @@
             Single <span class="px-1 py-px rounded-lg bg-primary">player</span>
           </p>
         </div>
-        <div class="cursor-pointer">
+        <div class="opacity-50 cursor-not-allowed">
           <div
             class="flex flex-row justify-center h-full align-middle bg-center bg-no-repeat bg-contain "
             :style="`background-image: url('${require('@/assets/backgrounds/aqua-bg.png')}')`"
@@ -58,7 +58,7 @@
           </div>
           <p>Dash<span class="px-1 py-px rounded-lg bg-primary">board</span></p>
         </div>
-        <div class="cursor-pointer">
+        <div class="opacity-50 cursor-not-allowed">
           <div
             class="flex flex-row justify-center h-full align-middle bg-center bg-no-repeat bg-contain "
             :style="`background-image: url('${require('@/assets/backgrounds/blue-bg.png')}')`"
@@ -74,7 +74,7 @@
             Multi<span class="px-1 py-px rounded-lg bg-primary">player</span>
           </p>
         </div>
-        <div class="cursor-pointer">
+        <div class="opacity-50 cursor-not-allowed">
           <div
             class="flex flex-row justify-center h-full align-middle bg-center bg-no-repeat bg-contain "
             :style="`background-image: url('${require('@/assets/backgrounds/green-bg.png')}')`"
@@ -97,12 +97,14 @@
 // Map getters
 import { mapGetters } from "vuex";
 // Mixins for local storage management
-import localStorageMixins from "../mixins/localStorage";
+import localStorageMixins from "../mixins/mixins.localstorage.js";
 // Languages front infos
 import { languages } from "../services/data/languages";
 
 export default {
-  mixins: [localStorageMixins],
+  mixins: [localStorageMixins({
+    selectedLanguage: ""
+  })],
 
   // data() {
   //   return {
@@ -116,7 +118,6 @@ export default {
     }),
 
     languagesOptions() {
-      console.log(this.supportedLanguages.map(language => (languages.find(element => element.id = language))));
       return this.supportedLanguages.map(language => (languages.find(element => element.id = language)));
     },
   },

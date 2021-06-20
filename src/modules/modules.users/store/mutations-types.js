@@ -1,1 +1,2 @@
 export const SET_USER = "SET_USER";
+export const SET_HAS_AUTH_BEEN_CHECKED = "SET_HAS_AUTH_BEEN_CHECKED";

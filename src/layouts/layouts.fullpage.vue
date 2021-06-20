@@ -1,5 +1,7 @@
 <template>
     <div class="w-full min-h-screen font-sans">
-        <router-view/>
+        <el-scrollbar :native="false">
+           <router-view /> 
+        </el-scrollbar>
     </div>
 </template>

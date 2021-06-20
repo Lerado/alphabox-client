@@ -4,12 +4,12 @@
       class="flex-row justify-center hidden w-1/4 bg-bottom bg-no-repeat bg-cover border-r-8 border-solid lg:flex border-primary"
       :style="`background-image: url(${require('@/assets/backgrounds/login-bg-1.png')}); padding-top: 40%`"
     >
-      <el-button
+      <!-- <el-button
         style="font-family: VT323"
         type="text"
         class="text-3xl text-white animate-pulse hover:animate-none"
         >Play now <span class="text-primary">!!!</span></el-button
-      >
+      > -->
     </div>
     <div
       class="w-full bg-center bg-no-repeat bg-cover lg:w-3/4"
@@ -38,8 +38,8 @@
       <register-component @toggle="toggleForms = !toggleForms" v-else />
 
       <div class="flex flex-row justify-end pr-24">
-        <el-button class="text-primary animate-bounce" type="text">
-          <span class="mr-1 font-bold uppercase">Visiter</span>
+        <el-button @click="$router.push({ name: 'main-menu' })" class="text-primary animate-bounce" type="text">
+          <span class="mr-1 text-lg font-bold uppercase">Skip</span>
           <i class="el-icon-d-arrow-right"></i>
         </el-button>
       </div>

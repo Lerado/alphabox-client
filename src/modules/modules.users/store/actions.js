@@ -1,10 +1,11 @@
 import http from '@/services/http';
-import { SET_USER } from './mutations-types';
+import { SET_USER, SET_HAS_AUTH_BEEN_CHECKED } from './mutations-types';
 
 // Routes available server-side
 const api = {
     login: '/users/login',
-    register: '/users'
+    register: '/users',
+    resolve: '/users/resolve'
 };
 
 export default {
@@ -47,5 +48,27 @@ export default {
         let response = await http.post(api.register, { user });
         if (commitable)
             commit(SET_USER, response.user)
+    },
+
+    /**
+     * Resolve JWT token
+     * 
+     * @param {*} param0 
+     * @param {Boolean} commitable 
+     */
+    async resolveToken({ commit }, commitable = true) {
+        // Tells a resolve attempt has been performed at least one
+        commit(SET_HAS_AUTH_BEEN_CHECKED, true);
+
+        // Async request
+        try {
+            let response = await http.get(api.resolve);
+            if (commitable)
+                commit(SET_USER, response.user);
+        } catch (error) {
+            // Flush user
+            commit(SET_USER, {})
+        }
+
     }
 }
