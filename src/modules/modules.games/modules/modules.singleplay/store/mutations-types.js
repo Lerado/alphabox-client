@@ -1,0 +1,1 @@
+export const SET_LEVEL_SETTINGS = "SET_LEVEL_SETTINGS";

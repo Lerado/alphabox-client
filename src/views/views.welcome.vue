@@ -4,7 +4,7 @@
     :style="`background-image: url(${require('@/assets/backgrounds/welcome-bg.png')})`"
   >
     <div class="flex flex-col justify-center h-full align-bottom" style="padding-top: 30%">
-      <div class="flex justify-center">
+      <div class="flex justify-center animate__animated animate__shakeX animate__delay-1s">
         <img
           width="100"
           height="100"
@@ -17,7 +17,7 @@
       <div class="flex justify-center mt-4">
         <router-link to="login">
           <button
-            class="font-bold border-2 border-pink-200 border-solid bg-primary animate-pulse rounded-3xl"
+            class="font-bold border-2 border-pink-200 border-solid bg-primary animate__animated animate__infinite animate__pulse animate__delay-3s rounded-3xl"
             id="playNowBtn"
           >
             PLAY

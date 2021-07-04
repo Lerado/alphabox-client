@@ -1,17 +1,20 @@
 export const difficulties = [
     {
+        intValue: 1,
         value: 'easy',
-        i18n: 'easy',
+        color: 'green',
         text: "Easy"
     },
     {
+        intValue: 2,
         value: 'intermediate',
-        i18n: 'intermediate',
+        color: 'yellow',
         text: "Intermediate"
     },
     {
+        intValue: 3,
         value: 'hard',
-        i18n: 'hard',
+        color: "orange",
         text: "Hard"
     }
 ];

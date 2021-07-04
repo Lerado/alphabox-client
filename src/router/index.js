@@ -21,6 +21,9 @@ const routes = [
       {
         path: '',
         name: 'welcome',
+        meta: {
+          transitions: { enter: "fadeIn", leave: "fadeOut" }
+      },
         component: () => import('../views/views.welcome.vue')
       }
     ],

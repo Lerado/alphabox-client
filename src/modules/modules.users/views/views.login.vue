@@ -32,13 +32,17 @@
       </div>
 
       <!-- Login component -->
-      <login-component @toggle="toggleForms = !toggleForms" v-if="!toggleForms" />
+      <transition enter-active-class="animate__animated animate__fadeInUp" >
+        <login-component @toggle="toggleForms = !toggleForms" v-if="!toggleForms" />
+      </transition>
 
       <!-- Register component -->
-      <register-component @toggle="toggleForms = !toggleForms" v-else />
+      <transition enter-active-class="animate__animated animate__fadeInDown">
+        <register-component @toggle="toggleForms = !toggleForms" v-if="toggleForms" />
+      </transition>
 
       <div class="flex flex-row justify-end pr-24">
-        <el-button @click="$router.push({ name: 'main-menu' })" class="text-primary animate-bounce" type="text">
+        <el-button @click="$router.push({ name: 'main-menu' })" class="text-primary animate__animated animate__infinite animate__bounce" type="text">
           <span class="mr-1 text-lg font-bold uppercase">Skip</span>
           <i class="el-icon-d-arrow-right"></i>
         </el-button>

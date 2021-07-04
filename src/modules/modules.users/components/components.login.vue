@@ -52,6 +52,7 @@
         <label class="text-sm text-white" for="password">Password</label>
         <el-input
           v-model="loginElements.password"
+          @keypress.enter="submitForm('loginForm')"
           type="password"
           class="w-full"
           prefix-icon="el-icon-key"

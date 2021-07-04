@@ -62,6 +62,7 @@
           >
           <el-input
             v-model="registerElements.password_confirmation"
+            @keypress.enter="submitForm('registerForm')"
             type="password"
             class="w-full"
             prefix-icon="el-icon-key"

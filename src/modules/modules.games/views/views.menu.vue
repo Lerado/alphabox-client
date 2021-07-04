@@ -13,11 +13,10 @@
           :key="index"
           :value="language.id"
           :label="language.label"
-          >
+        >
           <flag :iso="language.countryCode" />
           {{ language.label }}
-        </el-option
-        >
+        </el-option>
       </el-select>
     </div>
     <div
@@ -28,7 +27,10 @@
         class="grid w-full grid-flow-col grid-rows-4 mx-auto text-lg font-bold text-center text-white md:w-1/2 lg:w-1/3 gap-y-12 gap-x-5 sm:grid-rows-2 sm:gap-x-32 sm:gap-y-16"
         style="height: 22rem"
       >
-        <div class="cursor-pointer">
+        <div
+          @click="onSingleGameChoosen()"
+          class="cursor-pointer animate__animated animate__pulse animate__infinite"
+        >
           <div
             class="flex flex-row justify-center h-full align-middle bg-center bg-no-repeat bg-contain "
             :style="`background-image: url('${require('@/assets/backgrounds/purple-bg.png')}')`"
@@ -90,6 +92,53 @@
         </div>
       </div>
     </div>
+
+    <!-- Popup for single game -->
+    <el-dialog
+      title="Game settings"
+      v-model="singleGameParams.popup"
+      width="25%"
+      :center="true"
+    >
+      <el-form
+        class="flex flex-col justify-center w-full"
+        ref="singleGameForm"
+        label-position="top"
+        :model="singleGameParams.form"
+        :rules="singleGameParams.formRules"
+      >
+        <el-form-item prop="language" class="block w-full">
+          <el-select v-model="singleGameParams.form.language" class="w-full">
+            <el-option
+              v-for="(language, index) in languagesOptions"
+              :key="index"
+              :value="language.id"
+              :label="language.label"
+            >
+              <flag :iso="language.countryCode" />
+              {{ language.label }}
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="difficulty" class="block w-full mt-5">
+          <el-select v-model="singleGameParams.form.difficulty" class="w-full">
+            <el-option
+              v-for="(difficulty, index) in difficultiesOptions"
+              :key="index"
+              :value="difficulty.value"
+              :label="difficulty.text"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item class="block w-full mt-8">
+          <el-button
+            class="w-full text-lg text-white bg-primary"
+            @click="onSingleGameLaunched()"
+            >Let's go</el-button
+          >
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -100,17 +149,40 @@ import { mapGetters } from "vuex";
 import localStorageMixins from "../mixins/mixins.localstorage.js";
 // Languages front infos
 import { languages } from "../services/data/languages";
+// Difficulties
+import { difficulties } from "../services/data/difficulties";
 
 export default {
-  mixins: [localStorageMixins({
-    selectedLanguage: ""
-  })],
+  mixins: [
+    localStorageMixins({
+      selectedLanguage: "",
+    }),
+  ],
 
-  // data() {
-  //   return {
-  //     selectedLanguage: "",
-  //   };
-  // },
+  data() {
+    return {
+      singleGameParams: {
+        popup: false,
+        form: {
+          language: "",
+          difficulty: "",
+        },
+        formRules: {
+          language: {
+            required: true,
+            message: "You must choose a language for the game",
+          },
+          difficulty: {
+            required: true,
+            message: "Choose a difficulty!",
+          },
+        },
+      },
+
+      // Loading
+      loading: null,
+    };
+  },
 
   computed: {
     ...mapGetters({
@@ -118,8 +190,39 @@ export default {
     }),
 
     languagesOptions() {
-      return this.supportedLanguages.map(language => (languages.find(element => element.id = language)));
+      return this.supportedLanguages.map((language) =>
+        languages.find((element) => (element.id = language))
+      );
     },
+
+    difficultiesOptions() {
+      return difficulties;
+    },
+  },
+
+  methods: {
+    toggleLoading() {
+      return this.$loading({
+        lock: true,
+        text: "Loading...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+        customClass: "text-3xl"
+      });
+    },
+    onSingleGameChoosen() {
+      this.singleGameParams.popup = true;
+    },
+    onSingleGameLaunched() {
+      this.$refs["singleGameForm"].validate(async (valid) =>{
+        if (!valid) return;
+        this.loading = this.toggleLoading();
+        setTimeout(() => {
+          this.$router.push({ name: "single-play", params: { lang: this.singleGameParams.form.language, level: 1, difficulty: this.singleGameParams.form.difficulty }});
+          this.loading.close();
+        }, 2000);
+      });
+    }
   },
 
   async created() {

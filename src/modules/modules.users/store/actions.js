@@ -62,7 +62,7 @@ export default {
 
         // Async request
         try {
-            let response = await http.get(api.resolve);
+            let response = await http.get(api.resolve, { withCredentials: true });
             if (commitable)
                 commit(SET_USER, response.user);
         } catch (error) {
