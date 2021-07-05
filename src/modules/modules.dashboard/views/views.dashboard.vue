@@ -1,5 +1,10 @@
 <template>
+<<<<<<< Updated upstream
+<div class=" bg-gradient-to-r from-font1 to-blue_box11 h-100 space-y-4 space-x-12"
+>
+=======
 <div class=" bg-gradient-to-r from-font1 to-blue_box11 h-100 space-y-4 space-x-12">
+>>>>>>> Stashed changes
 <br>
 <p class="tracking-widest text-white text-center font-extrabold font-montserrat text-basic">DASHBOARD</p>
 <span class="w-30 h-40 absolute items-left inset-y-5 right-5 space-y-3">

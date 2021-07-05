@@ -2,14 +2,16 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 // Import modules routes
 import usersModuleRoutes from '@/modules/modules.users/routes'
-<<<<<<< Updated upstream
+
+
 import { gamesModuleFullpageRoutes } from '@/modules/modules.games/routes'
-=======
+
 
 import gamesModuleFullpageRoutes from '@/modules/modules.games/routes'
->>>>>>> Stashed changes
 
-//import { gamesModuleFullpageRoutes } from '@/modules/modules.games/routes'
+
+
+import { gamesModuleFullpageRoutes } from '@/modules/modules.games/routes'
 import { dashboardModuleFullpageRoutes } from '@/modules/modules.dashboard/routes'
  
 
