@@ -410,9 +410,11 @@ export default {
         else {
           // Show navigation buttons
           // Navigate to finish step
-          this.singleGame[`${ this.level }`].counters.stars = this.levelSettings.rewards.stars;
-          this.singleGame[`${ this.level }`].counters.medals = this.levelSettings.rewards.medal;
-          this.singleGame[`${ this.level }`].completed = true;
+          this.singleGame[`${this.level}`].counters.stars =
+            this.levelSettings.rewards.stars;
+          this.singleGame[`${this.level}`].counters.medals =
+            this.levelSettings.rewards.medal;
+          this.singleGame[`${this.level}`].completed = true;
         }
         this.singleGame = { ...this.singleGame }; // For the localStorage persitance module to handle the change
       }
@@ -512,13 +514,18 @@ export default {
         },
         steps: [],
         completed: false,
-        difficulty: this.difficultyObject.intValue,
 
         // Unpersistent data
         activeStep: 0,
       };
-      this.singleGame = { ...this.singleGame };
     }
+    // If it already exist, set difficulty for an uncomplete level
+    if (!this.singleGame[`${this.level}`].completed) {
+      this.singleGame[`${this.level}`].difficulty =
+        this.difficultyObject.intValue;
+    }
+
+    this.singleGame = { ...this.singleGame };
   },
 
   async created() {
