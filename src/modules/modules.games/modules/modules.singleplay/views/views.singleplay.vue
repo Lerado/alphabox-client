@@ -113,7 +113,7 @@
         </div>
         <div class="grid w-full grid-flow-col gap-4 my-auto">
           <div
-            class="flex flex-col"
+            class="flex flex-col animate__animated animate__slow animate__fadeIn"
             v-for="(step, index) in levelStepsResults"
             :key="index"
           >
@@ -181,35 +181,71 @@
     </template>
 
     <!-- Affix to finish a successful game or restart a loosed one -->
-    <el-affix
-      v-if="levelCompleted"
-      class="absolute animate__animated animate__headShake animate__slow animate__infinite"
-      position="bottom"
-      :z-index="1000"
-      style="left: 90%; top: 50%"
-    >
-      <el-button
-        class="shadow"
-        circle
-        icon="el-icon-caret-right"
-        type="primary"
-      ></el-button>
-    </el-affix>
+    <template v-if="levelCompleted">
+      <el-tooltip
+        v-if="level > 1"
+        content="Previous results"
+        placement="top-end"
+        effect="dark"
+      >
+        <el-affix
+          class="absolute animate__animated animate__headShake animate__delay-1s animate__slow animate__infinite"
+          position="bottom"
+          :z-index="1000"
+          style="right: 92%; top: 50%"
+        >
+          <el-button
+            @click="previousLevel()"
+            class="shadow"
+            circle
+            icon="el-icon-caret-left"
+            type="primary"
+          ></el-button>
+        </el-affix>
+      </el-tooltip>
 
-    <el-affix
-      v-if="levelCompleted"
-      class="absolute animate__animated animate__bounce animate__slow animate__infinite"
-      position="bottom"
-      :z-index="1000"
-      style="top: 90%"
-    >
-      <el-button
-        class="shadow"
-        circle
-        icon="el-icon-refresh-right"
-        type="primary"
-      ></el-button>
-    </el-affix>
+      <el-tooltip
+        content="Head to next level!"
+        placement="top-end"
+        effect="dark"
+      >
+        <el-affix
+          class="absolute animate__animated animate__headShake animate__slow animate__infinite"
+          position="bottom"
+          :z-index="1000"
+          style="left: 90%; top: 50%"
+        >
+          <el-button
+            @click="nextLevel()"
+            class="shadow"
+            circle
+            icon="el-icon-caret-right"
+            type="primary"
+          ></el-button>
+        </el-affix>
+      </el-tooltip>
+
+      <el-tooltip
+        content="Restart this level!"
+        placement="top-end"
+        effect="dark"
+      >
+        <el-affix
+          class="absolute animate__animated animate__bounce animate__slow animate__infinite"
+          position="bottom"
+          :z-index="1000"
+          style="top: 90%"
+        >
+          <el-button
+            @click="restartLevel()"
+            class="shadow"
+            circle
+            icon="el-icon-refresh-right"
+            type="primary"
+          ></el-button>
+        </el-affix>
+      </el-tooltip>
+    </template>
   </div>
 </template>
 
@@ -349,6 +385,13 @@ export default {
         customClass: "text-3xl",
       });
     },
+    message(message, type = "success") {
+      this.$message({
+        showClose: true,
+        message: message,
+        type: type,
+      });
+    },
     onStepFinished(results) {
       // If step is successful, add rewards and points to the counters, and step details
       if (results.success) {
@@ -367,15 +410,95 @@ export default {
         else {
           // Show navigation buttons
           // Navigate to finish step
-          this.singleGame[`${this.level}`].completed = true;
+          this.singleGame[`${ this.level }`].counters.stars = this.levelSettings.rewards.stars;
+          this.singleGame[`${ this.level }`].counters.medals = this.levelSettings.rewards.medal;
+          this.singleGame[`${ this.level }`].completed = true;
         }
         this.singleGame = { ...this.singleGame }; // For the localStorage persitance module to handle the change
       }
     },
-    nextStep() {},
+
+    // Restart level
+    restartLevel() {
+      // Reset level variables
+      this.loading = this.toggleLoading();
+      setTimeout(() => {
+        this.singleGame[`${this.level}`] = {
+          counters: {
+            stars: 0,
+            medals: 0,
+            points: 0,
+          },
+          steps: [],
+          completed: false,
+          difficulty: this.difficultyObject.intValue,
+          activeStep: 0,
+        };
+        this.singleGame = { ...this.singleGame };
+        this.loading.close();
+      }, 2000);
+    },
+
+    // Previous level
+    previousLevel() {
+      if (Number(this.level) > 1) {
+        this.loading = this.toggleLoading();
+        setTimeout(() => {
+          this.$router.push({
+            name: "single-play",
+            params: {
+              lang: this.language,
+              level: Number(this.level) - 1,
+              difficulty: this.difficulty,
+            },
+          });
+          this.loading.close();
+        }, 2000);
+      }
+    },
+
+    // Go to the next level
+    nextLevel() {
+      // Navigate to next level
+      this.loading = this.toggleLoading();
+      setTimeout(() => {
+        this.$router.push({
+          name: "single-play",
+          params: {
+            lang: this.language,
+            level: Number(this.level) + 1,
+            difficulty: this.difficulty,
+          },
+        });
+        this.loading.close();
+      }, 2000);
+    },
   },
 
   mounted() {
+    // If user aint authenticated alert
+    if (!this.isAuthenticated) {
+      this.$confirm(
+        "You are not authenticated so your game will not be saved. Continue ?",
+        "Warning",
+        {
+          type: "warning",
+          confirmButtonText: "No problem",
+          cancelButtonText: "Ok let me sign in",
+        }
+      )
+        .then(() => {
+          this.loading = this.toggleLoading();
+          setTimeout(async () => {
+            this.loading.close();
+          }, 2000);
+        })
+        .catch(() => {
+          // Go to the sign in page
+          this.$router.push({ name: "login" });
+        });
+    }
+
     // Create entry for this language in game data if none exist in local storage
     if (
       !Object.getOwnPropertyNames(this.singleGame).includes(`${this.level}`)
@@ -389,6 +512,7 @@ export default {
         },
         steps: [],
         completed: false,
+        difficulty: this.difficultyObject.intValue,
 
         // Unpersistent data
         activeStep: 0,
@@ -406,34 +530,20 @@ export default {
 
     // For an authenticated user, game state has already been loaded and we will simply retrieve the right part of data
     // If no game save exists for this language, create a new game
-    if (this.isAuthenticated) {
-      await this.$store.dispatch("games/getLevelSettings", { lang, level });
-    }
-    // If user is not authenticated, ask for level demo data
-    else {
-      this.$confirm(
-        "You are not authenticated so your game will not be saved. Continue ?",
-        "Warning",
-        {
-          type: "warning",
-          confirmButtonText: "No problem",
-          cancelButtonText: "Ok let me sign in",
-        }
-      )
-        .then(() => {
-          this.loading = this.toggleLoading();
-          setTimeout(async () => {
-            await this.$store.dispatch("games/getDemoLevelSettings", {
-              lang,
-              level,
-            });
-            this.loading.close();
-          }, 2000);
-        })
-        .catch(() => {
-          // Go to the sign in page
-          this.$router.push({ name: "login" });
+    try {
+      if (this.isAuthenticated) {
+        await this.$store.dispatch("games/getLevelSettings", { lang, level });
+      }
+      // If user is not authenticated, ask for level demo data
+      else {
+        await this.$store.dispatch("games/getDemoLevelSettings", {
+          lang,
+          level,
         });
+      }
+    } catch (error) {
+      this.message(error.message, "error");
+      this.$router.back();
     }
   },
 };

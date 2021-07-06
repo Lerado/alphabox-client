@@ -156,6 +156,7 @@ export default {
   mixins: [
     localStorageMixins({
       selectedLanguage: "",
+      singleGame: {},
     }),
   ],
 
@@ -207,25 +208,95 @@ export default {
         text: "Loading...",
         spinner: "el-icon-loading",
         background: "rgba(0, 0, 0, 0.7)",
-        customClass: "text-3xl"
+        customClass: "text-3xl",
       });
     },
     onSingleGameChoosen() {
       this.singleGameParams.popup = true;
     },
     onSingleGameLaunched() {
-      this.$refs["singleGameForm"].validate(async (valid) =>{
+      this.$refs["singleGameForm"].validate(async (valid) => {
         if (!valid) return;
-        this.loading = this.toggleLoading();
-        setTimeout(() => {
-          this.$router.push({ name: "single-play", params: { lang: this.singleGameParams.form.language, level: 1, difficulty: this.singleGameParams.form.difficulty }});
-          this.loading.close();
-        }, 2000);
+        // If a game has been detected, the user decides wether to continue or to start a new one
+        if (Object.getOwnPropertyNames(this.singleGame).length) {
+          this.singleGameParams.popup = false;
+          this.$confirm(
+            "We detected a save. Do you want to resume ?",
+            "Resume game ?",
+            {
+              type: "info",
+              distinguishCancelAndClose: true,
+              confirmButtonText: "Yes",
+              cancelButtonText: "No, start a new game",
+            }
+          )
+            .then(() => {
+              this.loading = this.toggleLoading();
+              // Compute last played level
+              let resumeLevel = 1;
+              for (const level of Object.keys(this.singleGame).sort(
+                (a, b) => a - b
+              )) {
+                if (this.singleGame[`${level}`].completed) resumeLevel++;
+                else break;
+              }
+              setTimeout(() => {
+                this.$router.push({
+                  name: "single-play",
+                  params: {
+                    lang: this.singleGameParams.form.language,
+                    level: resumeLevel,
+                    difficulty:
+                      resumeLevel > 1
+                        ? this.difficultiesOptions.find(
+                            (difficulty) =>
+                              difficulty.intValue ==
+                              this.singleGame[resumeLevel - 1].difficulty
+                          ).value
+                        : this.singleGameParams.form.difficulty,
+                  },
+                });
+                this.loading.close();
+              }, 2000);
+            })
+            .catch((action) => {
+              if (action === "cancel") {
+                this.loading = this.toggleLoading();
+                setTimeout(() => {
+                  this.singleGame = {};
+                  this.$router.push({
+                    name: "single-play",
+                    params: {
+                      lang: this.singleGameParams.form.language,
+                      level: 1,
+                      difficulty: this.singleGameParams.form.difficulty,
+                    },
+                  });
+                  this.loading.close();
+                }, 3000);
+              }
+            });
+        } else {
+          this.loading = this.toggleLoading();
+          setTimeout(() => {
+            this.singleGame = {};
+            this.$router.push({
+              name: "single-play",
+              params: {
+                lang: this.singleGameParams.form.language,
+                level: 1,
+                difficulty: this.singleGameParams.form.difficulty,
+              },
+            });
+            this.loading.close();
+          }, 3000);
+        }
       });
-    }
+    },
   },
 
   async created() {
+    // Fetch supported languages
     await this.$store.dispatch("games/fetchSupportedLanguages");
   },
 };

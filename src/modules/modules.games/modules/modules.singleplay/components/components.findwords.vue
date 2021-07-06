@@ -89,6 +89,7 @@
     <div class="flex flex-row w-11/12 py-5 mx-auto my-5">
       <div class="flex flex-col w-10/12">
         <el-input
+          ref="textarea"
           type="textarea"
           @keypress.enter="pushWords()"
           v-model="textareaContent"
@@ -168,6 +169,7 @@ export default {
         this.loading.close();
         this.$emit("gameStarted");
         this.start = true; // Triggers timer start
+        this.$refs["textarea"].focus() // Focus text area
       }, 3000);
     },
     onGameFinished() {
