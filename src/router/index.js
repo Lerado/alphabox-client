@@ -5,9 +5,12 @@ import store from "../store"
 import usersModuleRoutes from '@/modules/modules.users/routes'
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 
 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 import { gamesModuleFullpageRoutes } from '@/modules/modules.games/routes'
