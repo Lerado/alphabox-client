@@ -3,7 +3,17 @@ import store from "../store"
 
 // Import modules routes
 import usersModuleRoutes from '@/modules/modules.users/routes'
-import gamesModuleFullpageRoutes from '@/modules/modules.games/routes'
+
+<<<<<<< Updated upstream
+
+
+
+=======
+>>>>>>> Stashed changes
+import { gamesModuleFullpageRoutes } from '@/modules/modules.games/routes'
+import { dashboardModuleFullpageRoutes } from '@/modules/modules.dashboard/routes'
+ 
+
 
 const routes = [
   {
@@ -16,6 +26,9 @@ const routes = [
 
       // Games module fullpage routes
       ...gamesModuleFullpageRoutes,
+
+      // dashboard module fullpage routes
+      ...dashboardModuleFullpageRoutes,
 
       // Welcome page
       {
