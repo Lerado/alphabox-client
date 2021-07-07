@@ -5,7 +5,15 @@
   >
     <div class="flex justify-center w-1/6">
       <div class="flex flex-row justify-start w-full">
-        <img src="@/assets/logo.svg" height="80" width="80" :class="{ 'object-contain animate__headShake animate__infinite': true, 'animate__animated': gameStarted }"/>
+        <img
+          src="@/assets/logo.svg"
+          height="80"
+          width="80"
+          :class="{
+            'object-contain animate__headShake animate__infinite': true,
+            animate__animated: gameStarted,
+          }"
+        />
       </div>
     </div>
     <div class="flex w-1/6 mr-5 justify-self-start">
@@ -17,19 +25,21 @@
         />
       </div>
       <div class="flex flex-col my-auto">
-          <span class="font-medium text-white">{{ username }}</span>
-          <span class="text-xs font-light text-gray-300">Playing</span>
+        <span class="font-medium text-white">{{ username }}</span>
+        <span class="text-xs font-light text-gray-300">Playing</span>
       </div>
     </div>
     <div
-      class="flex justify-between w-3/6 text-white align-middle justify-self-center"
+      class="flex justify-between w-3/6 text-white align-middle  justify-self-center"
     >
       <div class="inline-block my-auto">
         <span class="inline-block mr-1 text-xl font-semibold align-middle">{{
           counters.stars
         }}</span>
         <span class="inline-block"
-          ><i class="text-2xl text-orange-500 align-middle el-icon-star-on animate__animated animate__swing animate__infinite"></i
+          ><i
+            class="text-2xl text-orange-500 align-middle  el-icon-star-on animate__animated animate__swing animate__infinite"
+          ></i
         ></span>
       </div>
       <div class="inline-block my-auto">
@@ -37,14 +47,17 @@
           counters.medals
         }}</span>
         <span class="inline-block my-auto"
-          ><i class="text-xl text-gray-300 align-middle el-icon-medal animate__animated animate__swing animate__infinite"></i
+          ><i
+            class="text-xl text-gray-300 align-middle  el-icon-medal animate__animated animate__swing animate__infinite"
+          ></i
         ></span>
       </div>
       <div class="inline-block my-auto">
         <span class="inline-block mr-2 text-sm align-middle">Points:</span>
-        <span class="inline-block text-xl font-semibold align-middle animate__animated animate__tada animate__infinite">{{
-          counters.points
-        }}</span>
+        <span
+          class="inline-block text-xl font-semibold align-middle  animate__animated animate__tada animate__infinite"
+          >{{ counters.points }}</span
+        >
       </div>
       <div class="inline-block my-auto">
         <span class="inline-block mr-2 text-sm align-middle">Level:</span>
@@ -55,17 +68,24 @@
       <div class="inline-block my-auto">
         <span class="inline-block mr-2 text-sm align-middle">Difficulty:</span>
         <span
-          :class="`inline-block text-xl font-semibold text-${ difficulty.color }-500 align-middle`"
+          :class="`inline-block text-xl font-semibold text-${difficulty.color}-500 align-middle`"
         >
           {{ difficulty.text }}
         </span>
       </div>
     </div>
     <div class="flex justify-end w-1/6 my-auto">
-      <el-button
-        class="font-semibold text-white special-blue-bg hover:bg-blue-400 hover:border-blue-400 hover:text-white"
-        >EXIT</el-button
+      <el-popconfirm
+        @confirm="$router.push({ name: 'main-menu' })"
+        title="Are you sure you want to leave the game ?"
       >
+        <template #reference>
+          <el-button
+            class="font-semibold text-white  special-blue-bg hover:bg-blue-400 hover:border-blue-400 hover:text-white"
+            >EXIT</el-button
+          >
+        </template>
+      </el-popconfirm>
     </div>
   </div>
 </template>
@@ -90,8 +110,8 @@ export default {
     },
     gameStarted: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   computed: {
